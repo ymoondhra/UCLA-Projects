@@ -2,11 +2,57 @@
 This is a collection of some of my best coding projects assigned by UCLA courses.
 
 ## Software Construction Laboratory – CS 35L ##
+### Assignment 10: Research and development in computing ###
+* Goal: Understand how a recent computer science development functions and analyze the implications of its creation
+* Method: Wrote a research paper and did a ten-minute presentation in front of my class about a sonnet-generating algorithm created at Duke University
 
+### Assignment 9: Change management ###
+* Goal: Master version control by editing the change log, using the functionality of branches, and implementing patches
+* Method: Downloaded a version of a library called "diffutils" and applied changes in a multitude of ways (e.g. through emacs)
+* Language(s): Git, Bash
+
+### Assignment 8: SSH setup and use in applications ###
+* Goal: Experience asymmetric cryptography by "hacking" into someone's BeagleBone and learn how to create public keys
+* Method: Logged into my partner's BeagleBone, managed authetication using ssh-agent, and ran commands on his BeagleBone
+* Language(s): Bash
+
+### Assignment 7: Dynamic linking ###
+* Goal: Learn how to create a makefile and attach dynamic libraries to C programs
+* Method: Dismantled a C program that generates random numbers, attached dynamic libraries to it, and assembled everything by creating a makefile
+* Language(s): C, Bash
+
+### Assignment 6: Multithreaded performance ###
+* Goal: Learn how to maximize the efficiency of C programs by utilizing threads
+* Method: Disassembled a ray tracing C program and increased the speed by 400% (1 thread vs 8 threads)
+* Language(s): C, Bash
+
+### Assignment 5: System call programming and debugging ###
+* Goal: Master the usage of buffered and unbuffered I/O by using system calls and the get/putchar functions
+* Method: Created a program identical to that of Assignment 4 except by using system calls and adding functionality. Analyzed the system calls using strace
+* Language(s): C, Bash
+
+### Assignment 4: C programming and debugging ###
+* Goal: Learn how to take advantage of dynamic memory allocation in C
+* Method: Create an algorithm that takes an encrypted set of data and outputs a sorted version of the data still in its encrypted form. The program had to decrypt the data, store it dynamically, sort it, and then encrypt it again. 
+* Language(s): C
+
+### Assignment 3: Modifying and rewriting software ###
+* Goal: Learn how to patch files, code in Python, and use Python's ArgumentParser
+* Method: Created and implemented patch files and separately built a Python program which represents the Python version of the "shuf" Bash command. It requires a text file and outputs the lines in a randomly generated order. The user is able to use numerous options to specify requirements for the output. 
+* Language(s): Python, Bash
+
+### Assignment 2: Shell scripting ###
+* Goal: Master the Bash commands for searching and sorting
+* Method: Created a Hawaiian spell-checker algorithm that converts a website page (as an HTML file) into a list of words and then compares the list against a Hawaiian dictionary
+* Language(s): HTML, Bash
+
+### Assignment 1: Getting to know your system ###
+* Goal: Learn emacs, Bash commands, and the organization of files in the computer system
+* Method: Completed numerous small tasks by navigating around my computer using the command line and by editing files using emacs
+* Language(s): Bash
 
 ## Computer Organization – CS33 ##
 ### Bomb Lab ###
-
 Each student was given a unique memory dump and had to figure out the input keys to defuse six bombs. To find the correct input, I set breakpoints in the program and stepped through line-by-line, checking values in registers and finding patterns in the way the code handled my input. The following is a small snippet of code I traced through.
 
 0000000000400f3b <phase_6>: <br />
@@ -29,19 +75,9 @@ Each student was given a unique memory dump and had to figure out the input keys
     &nbsp;&nbsp;&nbsp;&nbsp;400f70:    44 89 e3           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;      mov    %r12d,%ebx <br />
     &nbsp;&nbsp;&nbsp;&nbsp;400f73:    48 63 c3              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    movslq %ebx,%rax <br />
     &nbsp;&nbsp;&nbsp;&nbsp;400f76:    8b 55 00              &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    mov    0x0(%rbp),%edx <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;400f79:    3b 54 84 30        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;    cmp    0x30(%rsp,%rax,4),%edx <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;400f7d:    75 05                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   jne    400f84 <phase_6+0x49>  <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;400f7f:    e8 32 05 00 00      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   callq  4014b6 <explode_bomb> <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;400f84:    83 c3 01                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;  add    $0x1,%ebx <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;400f87:    83 fb 05               &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   cmp    $0x5,%ebx <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;400f8a:    7e e7                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   jle    400f73 <phase_6+0x38> <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;400f8c:    48 83 c5 04         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   add    $0x4,%rbp <br />
-    &nbsp;&nbsp;&nbsp;&nbsp;400f90:    eb c4                   &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;   jmp    400f56 <phase_6+0x1b> <br />
-
 
 ### Open MP Optimization Lab ###
 Each student was given the same C program, created by a UCLA graduate student, that superimposes multiple X-Ray photos to create a single photo. The goal was to make the code twenty times faster than the original program. I used the OpenMP API and optimization techniques such as tiling, strength reduction, and code motion to make the code thirty one times faster. 
-
 
 ### Attack Lab ###
 The goal of this six-phase lab was to hack a program by taking advantage of buffer overflow, injecting code, and using return-oriented-programming. I used the debugging tools GDB and OBJDUMP and used gadgets (byte-values) from a gadget farm. 
