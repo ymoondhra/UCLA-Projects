@@ -1,10 +1,10 @@
 # UCLA Projects
 This is a collection of some of my best coding projects assigned by UCLA courses.
 
-## CS 35L ##
+## Software Construction Laboratory – CS 35L ##
 
 
-## CS 33 ##
+## Computer Organization – CS33 ##
 
 ### Decrypter ###
 The assignment was to build a C++ program that can decrypt messages that are encrypted with the Simple Substitution Cipher 
@@ -21,5 +21,10 @@ The assignment was to build a C++ program that can decrypt messages that are enc
 Has functions like "pushMapping(string, string)", which adds a map<char, char> to the vector of maps <br />
 * Decrypter.cpp: A class called Decrypter that has an instance of WordList, Tokenizer, and Translator. Its main function, crack(string ciphertext) takes in an encrypted string as an input. Using the tokenizer, it separates the input string into words. The private function nextWord picks the most valuable next word in the string to find decryption mappings for based on the number of characters unknown. Using the Translator object, a string is produced based on what letters are known (i.e. a) and what letters are not (?). We then find the candidate words that the encrypted word could be. If there are no candidates for the word, we throw away that the mapping because we know it is wrong. Otherwise, we run a for loop that iterates through each word of the tokenized list pushes a possible mapping for each of the candidate words. The mapping is thrown away if the fully translated words are not in the wordlist. If the words are in the wordlist and the sentence is not fully translated (it has '?'s), then the crack function is recursively called. The fully translated mappings with words that are all in the word list are returned.
 
+### NachenBlaster ###
+We were given the setup and environment for an empty game. The assignment was to build a C++ program very similar to the video game Galaga (https://www.youtube.com/watch?v=dvjapcHsqXY), where the user shoots cabbages at alien ships. Each level becomes increasingly difficult, as the aliens move faster, gain health, and increase in speed. The user's spaceship, called the NachenBlaster, can pick up powerups such as torpedos or extra lives. <br />
+To create this application, I used inheritance (Actor.h), polymorphism (Actor.cpp), and encapsulation (StudentWorld.cpp).
 
-## CS 32 ##
+
+## Data Structures & Algorithms – CS32 ##
+
