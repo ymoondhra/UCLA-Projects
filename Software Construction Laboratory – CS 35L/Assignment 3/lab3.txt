@@ -1,0 +1,44 @@
+1. I downloaded the signature and keyring using wget. The gpg --verify
+--keyring ./gnu-keyring.gpg coreutils-8.29.tar.xz.sig command output
+provided a warning that this key is not certified with a trusted signature
+because there is no proof that this signature is owned by the owner.
+
+2. I went to the Coreutils downloads page, found version 8.29, and
+downloaded the coreutils-8.29.tar.xz file to /u/cs/ugrad/moondhra/cs35/lab3
+using the command wget https://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz
+To unzip the tar file, I knew I had to use a tar command. I used the file
+filename command to find out which type of file it was (XZ compressed data).  
+To open the tar file I did: tar xvf coreutils-8.29.tar.xz, which outputted
+tons of files into the terminal output. I tried using the -z option to unzip
+the package, but it was giving the error that the file was not a gzipped file.
+The INSTALL file delineates how to use the product. 
+I cd’ed into the new directory created (which I renamed to coreutils) used
+the shell command “./configure.” This command is taking minutes to complete.
+./configure did not work because there was no permission to install the
+software on /usr/local/cs/bin. To circumvent this, I used the --prefix command
+to install the software to a place where I had permission: ./configure
+--prefix /u/cs/ugrad/moondhra/cs35/lab3
+then “make”, and finally “make install” to build and install this package. 
+
+3. To reproduce the bug: I went to Message #5 and followed the instructions.
+I created a folder foo (mkdir foo), and then did ./bin/ls -aA foo, which
+calls coreutils’ ls command inside the foo directory. It outputs “. ..”,
+even though it should output nothing because I put no files in it. 
+
+4. I tried to use wget to download the patch file, which did not work, so
+I used emacs to create a new file called “patcher” and pasted the code from
+the link to the file. Cd into coreutils. We want to strip /a and /b , and
+“patch -p1 < patcher” lets us do that. NEWS turned to NEWS.rej because
+the file could not be patched. 
+
+5. I used make, which didn’t work because the automake command was not
+found. I had to run autoreconf -f -i to redownload the automake file.
+We have to call make again so that it recompiles the parts of the
+program we changed (i.e. ls). Make calls “make all-recursive” to
+iterate through the sub-directories to check if files were changed.
+The program enters directories when it needs to check if files were
+changed and leaves the directories when it finishes its checks.
+
+6. I went to the “src” folder of my coreutils and created a folder
+called “foo”. I ran “./ls foo -a -A”, which outputted nothing. “./ls
+foo -A -a” outputted “.” and “..”. This functions properly.

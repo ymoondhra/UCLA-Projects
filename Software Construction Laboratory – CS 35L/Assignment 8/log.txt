@@ -1,0 +1,74 @@
+Partner: Revanth Kumar Yamani
+
+First, I plugged the BeagleBone circuit board into the library
+computer (Windows system) using the provided micro-USB cable and
+clicked the device icon on the computer. It said the drivers are
+already installed on the START.htm page. Step 3 (Browse to web server
+on board) was not green, meaning it had not been completed yet. I also
+connected to CR3760-wifi.
+
+I opened up Putty and typed the IP address “192.168.7.2”. I logged in
+as the root user and installed xauth and xterm using “apt-get install
+xauth” and “apt-get install xterm”. I also ran sudo apt-get update.
+
+To connect it to the wifi, I used these connmanctl commands (taken
+directly from the Piazza post):
+sudo connmanctl
+enable wifi
+scan wifi
+services
+agent on
+connect wifi_2cf7f1065372_4352333736302d77696669_managed_psk
+3760ClassNet //passphrase
+Quit
+
+Running ifconfig and looking at the wlan0: inet addr showed this:
+10.97.85.157
+My partner’s IP address is 10.97.85.153 To get into my
+partner’s BeagleBone, I ran “ssh debain@10.97.85.153”, as he could not
+gain access to his root user. His password was “temppwd”. Then, I
+exited.
+
+To create a non-root user account named rev2 for my partner, I ran:
+sudo useradd -d /home/homedir -m rev2
+sudo passwd rev2 //i made the password “1”
+
+cd home/homedir
+sudo mkdir .ssh
+sudo chown -R .ssh //changes the ownership of all files within .ssh
+sudo chmod 700 .ssh //changes the permissions of .ssh
+
+I used the following commands to generate public/private rsa key pair:
+cd ~
+ssh-keygen //and saved it to the default directory without a passphrase
+
+To copy my public key to the server for key-based authentication:
+ssh-copy-id -i yash3@10.97.85.153 //password: yash To add private key
+to authentication agent: ssh-add
+The above command failed. It could
+not open a connection to the authentication agent. To solve this
+problem:
+ssh-agent //outputted details about the identity keys and passphrases
+eval $(ssh-agent) //executes ssh-agent as a shell command
+ssh-add // worked: “Identity added: /root.ssh/id_rsa (rsa w/o comment)
+
+To log in to my partner’s BeagleBone:
+ssh yash3@10.97.85.153 //outputted “Linux beaglebone 4.9.78-ti-r94 . . . 
+ssh -X yash3@10.97.85.153 //outputted the key fingerprint and added my
+partner’s IP address to the list of known hosts.
+xterm //successfully displayed on my terminal
+
+
+PROBLEMS I HAD WITH THE BEAGLEBONE: When I plug the BeagleBone into my
+personal computer, it says the drivers are not installed, even though
+I tried all combinations of installing the drivers on Piazza. For my
+partner, Revanth, he was able to install the drivers on his
+beaglebone. However, once he plugged in my beaglebone, it says the
+drivers are not installed. For his beaglebone, he was having the
+problem that he doesn’t know what the beaglebone’s password is, even
+though he bought it brand new. We ended up using the debian user for
+his beaglebone, and borrowed a laptop from Boelter Hall for mine.
+
+Because I had to use a separate computer to run the BeagleBone, I was
+not able to copy some of the outputs of this lab into this
+file. Everything is manually typed here.

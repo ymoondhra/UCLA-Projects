@@ -1,0 +1,19 @@
+#!/bin/bash
+
+find_utf()
+{
+    for var in "$@"
+    do
+        if [[ -d $var ]]; then
+	    cd $var
+	    find_utf $(ls)
+	    cd ..
+	else
+	    if file -b $var | grep -c -q "UTF-8";  then
+                echo $var
+            fi
+	fi
+    done
+}
+
+find_utf "$@"

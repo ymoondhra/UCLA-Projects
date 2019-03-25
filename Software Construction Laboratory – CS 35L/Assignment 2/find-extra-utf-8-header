@@ -1,0 +1,22 @@
+#!/bin/bash
+
+find_utf()
+{
+    for var in "$@"
+    do
+        if [[ -d $var ]]; then
+	    cd $var
+	    find_utf $(ls)
+	    cd ..
+	else
+	    if file -b $var | grep -c -q "ASCII";  then
+		line=$(head -n 1 $var)
+		if [ "$line" == "-*- coding: utf-8 -*-" ]; then
+		   echo $var
+                fi		
+	    fi
+        fi
+    done
+}
+
+find_utf "$@"

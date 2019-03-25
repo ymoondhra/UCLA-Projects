@@ -1,0 +1,19 @@
+#!/bin/bash
+
+find_ascii()
+{
+    for var in "$@"
+    do
+        if [[ -d $var ]]; then
+	    cd $var
+	    find_ascii $(ls)
+	    cd ..
+	else
+	    if file -b $var | grep -c -q "ASCII";  then
+                echo $var
+            fi
+	fi
+    done
+}
+
+find_ascii "$@"

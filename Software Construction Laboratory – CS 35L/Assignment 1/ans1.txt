@@ -1,0 +1,48 @@
+1. man -k keyword
+2. mv location: /usr/local/cs/bin/mv
+   sh location: /usr/bin/sh
+   I used "which <mv, sh> to find these locations
+3. man find
+   find . -executable -name "?r"
+   man pr, tr
+4. readlink /usr/bin/emacs outputs /etc/alternatives/emacs
+5. cd /usr/bin
+   gcc --version outputs 8.2.0
+   They are different because they have different paths
+6. u+sx: the user/owner can execute the file and the group ID is set
+   o-w: users who are not members and are not the owner cannot write
+7. cd /usr/local/cs
+   find -mtime 28 -type d
+   .
+   ./src/bison
+   ./src/bison/RCS
+   ./src/grep
+   ./src/grep/RCS
+   ./src/ocaml
+   ./src/ocaml/RCS
+   ./share/info
+   ./share/man/man1
+   ./share/man/man3
+   ./bin
+8. cd /usr/bin
+   ls -l | grep ^- | wc
+   303 files are symbolic links
+9. cd /usr/lib64
+   ls -lt | grep ^-
+   librom1394.so.0.3.0
+10. man -k locale
+    "locale (1p)          - get locale-specific information"
+11. C-h a downcase
+    downcase-dwim
+    downcase-region
+    downcase-word
+12. C-M-r scroll to top window
+    C-M-v scroll to bottom window
+    I used C-h t to find these commands
+13. C-g quits the current set of commands that the user has entered. For example, if the user has entered C-u 200, then C-g will not do the following command 200 times
+14. Yank pastes the text that was killed last (commands: C-Space, highlight area, C-w, C-y to paste it). The C-h t tutorial taught me this.
+15. cd /usr/bin emacs C-h f dired says that dired is bound to C-x d
+    C-g
+    C-x d prints "total used in directory 348248 available 11379416"
+    ls -l prints "total 348160"
+

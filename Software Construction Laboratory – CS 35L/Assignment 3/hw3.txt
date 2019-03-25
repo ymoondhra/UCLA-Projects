@@ -1,0 +1,22 @@
+QUESTION 1: The original ls function took 0.045s seconds to complete
+(time ./bin/ls), whereas the patched ls function took 0.029s to complete
+(time ./coreutils/src/ls). Therefore, the patched ls function is faster.
+
+QUESTION 2: The original code only sets ignore_mode to IGNORE_DOT_AND_DOTDOT
+if ignore_mode is IGNORE_DEFAULT. However, with the patch, no matter what
+we will always set ignore_mode to IGNORE_DOT_AND_DOTDOT. This can pose
+problems if we want to ignore things in a different way, other than
+IGNORE_DOT_AND_DOTDOT. For example, if we want to set ignore_mode to some
+special type of ignore (i.e. ignore_mode = IGNORE_SPECIAL), then no matter
+what ignore_mode will always be set to IGNORE_DOT_AND_DOTDOT.
+
+QUESTION 3: When the input file is empty, the root error is that the imported
+function from random (random.choice) expects that its input has at least 1
+line. This raises and IndexError: list index out of range. This returns to
+the chooseline(self) function, which returns an error to line 64 when
+generator.chooseline() is served as an input to sys.stdout.write(). Finally,
+the main function receives the error in line 70.
+
+QUESTION 4: When I run “python3 randline.py /dev/null, the terminal returns
+a syntax error because in Python3, the proper syntax is “except IOError as
+err”. You cannot do except IOError as (errno, strerror).

@@ -1,0 +1,21 @@
+The instance of XQuartz is basically separated in to two main
+sections:
+
+TOP:
+	Top-left: A graphical depiction of the git tree,
+	displaying the list of commits.
+
+	Top-middle: A list of all the collaborators.
+	Their email is also listed in alligator brackets.
+
+	Top-right: A list of the date of each commit
+
+BOTTOM:
+
+	Bottom-top (the top of part of the bottom section):
+	A tool to find commits using a searchbar and filters.
+
+	Bottom-left: Shows the commit's details and change log
+
+	Bottom-right: a selector for the files modified
+	by the commit

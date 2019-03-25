@@ -1,0 +1,13 @@
+#!/bin/bash
+
+cat $1 |
+tr '[A-Z]' '[a-z]' |
+grep -E "<td>.{1,}</td>" |
+awk 'NR % 2 == 0' |
+sed 's/<\/*[a-zA-Z]*>//g' |
+sed 's/`/'\''/g' |
+sed 's/,/ /g' |
+tr " " "\n" |
+sed '/[^pk'\''mnwlhaeiou]/d' |
+tr -s '\n' |
+sort -u

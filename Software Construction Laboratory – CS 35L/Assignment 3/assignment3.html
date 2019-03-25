@@ -1,0 +1,196 @@
+<!DOCTYPE html
+	PUBLIC "-//W3C//DTD HTML 4.01//EN"
+	"http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html;charset=UTF-8'>
+<title>Assignment 3. Modifying and rewriting software</title>
+</head>
+
+<body>
+
+<h1>Assignment 3. Modifying and rewriting software</h1>
+
+<h2>Laboratory: Installing a small change to a big package</h2>
+
+<p>Keep a log in the file <code>lab3.txt</code> of what you do in the
+lab so that you can reproduce the results later. This should not
+merely be a transcript of what you typed: it should be more like a
+true lab notebook, in which you briefly note down what you did and
+what happened.</p>
+
+<p>You're helping to build an application containing a shell script
+that invokes the <a
+href='http://www.opengroup.org/onlinepubs/009695399/utilities/ls.html'><code>ls</code></a>
+command to get file status.
+Your application is running atop the Maroon Chapeau Enterprise Linux 8 distribution, which uses the <code>ls</code> implementation supplied by <a href='http://www.gnu.org/software/coreutils/'>Coreutils</a> 8.29.
+You've been
+running into the problem that some users create a shell
+script <code>la</code> with the following contents:</p>
+
+<pre><code>#!/bin/sh
+exec ls -a "$@"
+</code></pre>
+
+<p>For these users the command <code>la -A</code> is therefore
+equivalent to <code>ls -a -A</code>. Unfortunately, with
+Coreutils <code>ls</code>, the <code>-a</code> option always overrides
+the <code>-A</code> option regardless of which option is given first,
+so the <code>-A</code> option has no effect in <code>la</code>.  For
+example, if the current directory has two files
+named <code>.foo</code> and <code>bar</code>, the command <code>la
+-A</code> outputs four lines, one each
+for <code>.</code>, <code>..</code>, <code>.foo</code>,
+and <code>bar</code>. These users want <code>la -A</code> to output
+just two lines instead, one for <code>.foo</code> and one
+for <code>bar</code>. That is, for <code>ls</code> they want a
+later <code>-A</code> option to override any earlier <code>-a</code>
+option, and vice versa.</p>
+
+<p>You've been asked to look into the problem and fix it. Start by
+verifying that the problem still occurs in <code>/usr/bin/ls</code> on
+the SEASnet GNU/Linux servers. Also, check the Coreutils version
+that <code>/usr/bin/ls</code> corresponds to.</p>
+
+<p>You discover that the problem is a known bug with Coreutils,
+<a href='https://debbugs.gnu.org/cgi/bugreport.cgi?bug=30963'>Bug#30963</a>.
+The bug report has a patch intended for publication in a later
+Coreutils release; see its Message #10.
+You don't want to wait for the later release to be installed on your system,
+so you decide to build a copy of Coreutils 8.29 with just this patch
+added, as follows:</p>
+
+<ol>
+
+<li>Grab
+the <a href='ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz'>Coreutils
+8.29 source code compressed tarball</a> and verify
+its <a href='ftp://ftp.gnu.org/gnu/coreutils/coreutils-8.29.tar.xz.sig'>signature</a>
+with the <a href='https://ftp.gnu.org/gnu/gnu-keyring.gpg'>GNU
+keyring</a> by running the shell command <samp>gpg --verify --keyring
+./gnu-keyring.gpg coreutils-8.29.tar.xz.sig</samp> in your directory.
+Note any problems with this verification, and briefly explain why they happen.
+</li>
+
+<li>Compile and install your copy of
+Coreutils into a temporary directory of your own. Note
+any problems you run into.</li>
+
+<li>Reproduce the bug on your machine with the unmodified version of
+coreutils. The test case that comes with the patch should give you
+ideas for how to reproduce the bug.</li>
+
+<li>Apply the patch of Bug#30963 Message #10.
+Note any problems that occur
+(they should not prevent the modified coreutils from working).</li>
+
+<li>Type the command <code>make</code> at the top level of your source
+tree, so that you build the fixed version, without installing it
+into your temporary directory. For each
+command that gets executed, explain why it needed to be executed (or
+say that it wasn't neeeded).</li>
+
+<li>Make sure your change fixes the bug, by testing that the
+modified <code>ls</code> works on the same tests where the
+unmodified <code>ls</code> didn't work.</li>
+</ol>
+
+<p>Q1. Does the patch improve the performance of <code>ls</code>
+or make it worse? Briefly explain.</p>
+
+<p>Q2. If your company adopts this patched version of Coreutils
+instead of the default one, what else should you watch out for? Might
+this new version of Coreutils introduce other problems with your
+application?</p>
+
+<h2>Homework: Rewriting a script</h2>
+
+<p>Consider the Python script
+<a href='randline.py'><code>randline.py</code></a>.</p>
+
+<p>Q3. What happens when this script is invoked on an empty file like
+<code>/dev/null</code>, and why?</p>
+
+<p>Q4. What happens when this script is invoked with Python 3 rather
+than Python 2, and why? (You can run Python 3 on the SEASnet hosts by
+using the command <code>python3</code> instead
+of <code>python</code>.)</p>
+
+<p>Write a new script <code>shuf.py</code> in the style
+of <code>randline.py</code>; your script should implement the GNU
+<code><a href='https://www.gnu.org/software/coreutils/manual/html_node/shuf-invocation.html'>shuf</a></code>
+command that is part of GNU Coreutils.
+You should already have a copy of the <code>shuf</code>
+source code and documentation; look at the files you created in the
+laboratory. However, GNU <code>shuf</code> is written in C, whereas
+you want a Python implementation so that you can more easily add
+new features to it.</p>
+
+<p>Your program should support the following <code>shuf</code>
+options, with the same behavior as GNU <code>shuf</code>:
+<code>--input-range</code> (<code>-i</code>),
+<code>--head-count</code> (<code>-n</code>),
+<code>--repeat</code> (<code>-r</code>),
+and <code>--help</code>.
+As with GNU <code>shuf</code>, if <code>--repeat</code> (<code>-r</code>)
+is used without <code>--head-count</code> (<code>-n</code>),
+your program should run forever.
+Your program should also support
+zero non-option arguments or
+a single non-option argument "<code>-</code>"
+(either of which means read from standard input),
+or a single non-option argument other than "<code>-</code>"
+(which specifies the input file name).
+Your program need not support the other options of GNU <code>shuf</code>.
+As with GNU <code>shuf</code>, your program
+should report an error if given invalid arguments.</p>
+
+<p>Your <code>shuf.py</code> program should not import any
+modules other than <code>argparse</code>,
+<code>string</code> and the modules that <code>randline.py</code>
+already imports.
+Don't forget to change its usage message to
+accurately describe the modified behavior.</p>
+
+<p>Port your <code>shuf.py</code> implementation to Python 3.  If you
+  have trouble with <code>optparse</code> under Python 3, you can use
+  the <code>argparse</code> module instead.  Make sure that
+  your <code>shuf.py</code> still works with Python 2. Don't rewrite
+  it from scratch; make as few changes as is reasonable.</p>
+
+<h2>Submit</h2>
+
+<p>Submit the following files.</p>
+
+<ul>
+
+<li>The file <code>lab3.txt</code> as described in the lab.</li>
+
+<li>A file <code>hw3.txt</code> containing the answer to questions
+Q1 through Q4 noted above.</li>
+
+<li>The file <code>shuf.py</code> as described
+in the homework.</li>
+
+</ul>
+
+<p>All files should be ASCII text files, with no
+carriage returns, and with no more than 80 columns per line. The shell
+command:</p>
+
+<pre><code>expand lab3.txt hw3.txt | awk '/\r/ || 80 &lt; length'
+</code></pre>
+
+<p>should output nothing.</p>
+
+<hr>
+<address>
+ &copy; 2005, 2007&ndash;2013, 2015, 2018 <a href='../mail-eggert.html'>Paul Eggert</a>.
+ See <a href='../copyright.html'>copying rules</a>.<br>
+
+ $Id: assign3.html,v 1.31 2018/10/26 23:53:12 eggert Exp $
+
+</address>
+
+</body>
+</html>

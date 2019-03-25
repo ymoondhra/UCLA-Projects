@@ -1,0 +1,75 @@
+LAB:
+tr2b.c: I decided that the best way to approach this was to first check
+if “from” and “to” did not have any errors, then go about getting the
+stdin and outputting the appropriate values. I checked if from and to were
+the same length (using argv[1],[2] and len()). I then created a copy of “from”
+and sorted it to check if each byte (i) was the same as the next (i+1). If
+one byte was the same as the next in the sorted “from” string, that means there
+are duplicated bytes in the sorted “from” string, so I returned an error.
+Then, I used getchar() to get the standard input one character at a time,
+converted that character, and outputted it to the standard output.
+
+Tr2u.c: I used “cp tr2b.c tr2u.c” to create a copy of tr2b.c. I got rid of
+the lines involving getchar and putchar, and replaced them with dynamic memory
+allocation of one byte, reading into that one byte of memory, and then writing
+that one byte. This all occurred in the same format as tr2b.c 
+
+I used “head --bytes=5000001 /dev/urandom > big.txt” to create a really large
+text file (of 5,000,001 bytes).  Strace -c gives us a summary about
+the strace call. 
+
+A: When copying to a file: 
+“strace -c -o s1.txt ./tr2b def 890 < big.txt > ob.txt”:
+performed 1253 calls (611 write, 613 read).
+“strace -c -o s2.txt ./tr2u def 890 < big.txt > ou.txt”:
+performed 10000028
+Calls (500,000 write, 500,003 read).
+
+B: When copying to terminal: 
+“strace -c -o st1.txt ./tr2b def 890 <big.txt”: This command attempted to
+output the entire file into my terminal and ended up attempting to call
+commands in it, outputting “~bash: 2c1: command not found”. It produced
+20494 calls (19852 write, 613 read).
+“strace -c -o st1.txt ./tr2u def 890 <big.txt”: performed 61 calls.
+
+Testing tr2b by sending it to an output file:
+time cat big.text | ./tr2b def 123 > ob.txt
+real	0m0.015s
+user	0m0.002s
+sys	0m0.002s
+Testing tr2u by sending it to an output file:
+time cat big.text | ./tr2u def 123 > ob.txt
+	real	0m0.004s
+user	0m0.000s
+sys	0m0.003s
+Testing tr2b by sending it to terminal:
+time cat big.txt | ./tr2b def 123 > ob.txt
+	real	0m0.249s
+user	0m0.173s
+sys	0m0.012s
+	Testing tr2u by sending it to terminal:
+time cat big.txt | ./tr2u def 123 > ou.txt
+	real	8m23.433s
+user	1m34.631s
+sys	6m46.767s
+
+
+HOMEWORK:
+I created a copy of my sfrob.c program by doing “cp sfrob.c sfrobu.c”. 
+Sfrob vs sfrobu:
+I created a file of 50,000 bytes using head --bytes=50000
+/dev/urandom > big.txt
+–time cat textfile.txt | ./sfrobu: for a one-line input file, sfrobu
+took 0.001 second less than sfrob. 
+–time cat big.txt | ./sfrobu: interestingly, when I run my program
+on a large file, sfrobu took 0.091 seconds while sfrob only took 0.003
+seconds. 0.003 seconds doesn’t make sense and could’ve been caused by
+the fact that some characters in the file were interpreted as
+commands in my program (i.e. 1;2c) so the program quit.
+–time cat big.txt | ./sfrobu -f: when I used the option “f”, the command
+took 88% of the time as when I did not use the option. 
+
+–time cat textfile.txt | ./sfrobs -f: took 0.006s
+–time cat textfile.txt | ./sfrobs: took 0.011s
+–time cat textfile.txt | ./sfrobu -f: took 0.002s
+–time cat textfile.txt | ./sfrobu: took 0.002s

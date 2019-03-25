@@ -1,0 +1,153 @@
+L A B O R A T O R Y
+To sort words:
+sort /usr/share/dict/words > words. I noticed that the words that
+start with an apostrophe were put to the beginning of the new sorted
+file. For example, ‘d is not longer after Czur. It is the second word
+in the list, after &c. This is because the sort commands orders words
+based on their ASCII values. 
+
+--cat assign2.html | tr -c 'A-Za-z' '[\n*]': each character that is
+not a alphabet letter is converted to a new line (i.e. “<” becomes
+a new line). If -c is there, the set1 is converted to the opposite
+of set1 before any other option is run.
+-- cat assign2.html | tr -cs 'A-Za-z' '[\n*]': every time there
+are multiple characters of the same type that are being converted to
+new lines, it is converted to one line instead of multiple.
+-- cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort: the output
+from the last command is inputted into the sort command
+through the pipe. The words are printed in alphabetic order.
+--  cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort -u:
+the same output as the last command, except that duplicated
+words are converted into one occurrence (i.e. 3 “apple” words
+are converted to just one “apple”)
+-- cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort -u |
+comm - words: takes the previous input as well as the “words” file
+we sorted previously, and compares them with the comm command.
+The first column produced are words unique to the assign2.html
+sorted file, the second column produced are words unique to
+the “words” file, and the third column produced are words that
+assign2.html and “words” both contain.
+-- cat assign2.html | tr -cs 'A-Za-z' '[\n*]' | sort -u |
+comm -23 - words: we are only seeing column one of the previous
+input, which is words unique to the “words” file.
+
+To create hwords, I knew that I had to create buildwords first
+and then simply pass in my input to buildwords and then send it
+to a file called hwords (cat inputHwords | ./buildwords
+> hwords). To create the file from a list of English and Hawaiian
+words, I knew I had to make all the letters lowercase before comparing
+them to each other and then only care about the lines that had words.
+To get rid of the English words, I deleted every other line.
+To get a list of just the words, I stripped away all html tags
+(i.e. <u>, </a>). I then converted the ASCII grave accents to
+apostrophes and commas to spaces. All hawaiian words that had
+spaces between them were actually separate words. I converted those
+spaces to new lines, deleted the non-Hawaiian words
+(with non-Hawaiian characters), and then deleted all the
+extra new lines before sorting it.
+
+Here is my buildwords coded, described above:
+cat $1 |
+tr '[A-Z]' '[a-z]' |
+grep -E "<td>.{1,}</td>" |
+awk 'NR % 2 == 0' |
+sed 's/<\/*[a-zA-Z]*>//g' |
+sed 's/`/'\''/g' |
+sed 's/,/ /g' |
+tr " " "\n" |
+sed '/[^pk'\''mnwlhaeiou]/d' |
+tr -s '\n' |
+sort -u
+
+To make the English spellchecker from the previous command:
+--cat assign2.html  | tr -cs 'A-Za-z' '[\n*]' |	tr 'A-Z'
+'a-z' | sort -u | comm -23 - words
+
+To make the Hawaiian spellchecker from the previous command:
+--cat assign2.html | tr -cs "pk\'mnwlhaeiouPKMNWLHAEIOU"
+'[\n*]' | tr 'PKMNWLHAEIOU'
+'pkmnwlhaeiou' | sort -u | comm -23 - hwords
+
+--Hawaiian spell checker on assign2.html: to count how
+many words were outputted by the Hawaiian Spellchecker,
+I used wc -w after my Hawaiian spellchecker command above,
+which led tpo 216 MISSPELLED WORDS.
+--Hawaiian spellchecker on hwords itself: I used cat on
+hwords instead of assign2.html
+and used wc -w to count the amount of misspelled Hawaiian
+words in hwords. This outputted 0,
+meaning all lines in hwords are hawaiian words. 
+-- English spellchecker on assign2.html: to count how
+many words were outputted by the
+English Spellchecker, I used wc -w, which outputted
+42 MISSPELLED WORDS
+
+Misspelled as English but not Hawaiian: to find the words that
+the English Spellchecker was misspelled, I used my English spellchecker
+command. Then, I modified my code for the Hawaiian
+spellchecker so that it outputs the words that ARE hawaiian
+rather than the non-hawaiian words:
+tr -cs "pk\'mnwlhaeiouPKMNWLHAEIOU" '[\n*]' | tr 'PKMNWLHAEIOU'
+'pkmnwlhaeiou' | sort -u | comm -12 - hwords. . . comm -12 gets
+the words that are shared by both the hawaiian dictionary
+and the input file. These are the words that are misspelled
+in English but not Hawaiian:
+e
+halau
+i
+lau
+po
+wiki
+
+Misspelled as Hawaiian but not English: to find the words that
+the Hawaiiian Spellchecker misspelled, I used my Hawaiian
+spellchecker command. Then, I modified my code for the
+English spellchecker so that it outputs the words that
+ARE english rather than the non-english words: tr -cs 'A-Za-z'
+'[\n*]' | tr 'A-Z' 'a-z' | sort -u | comm -12 - words...
+comm -12 gets the woreds that are shared by both the english
+dictionary and input file of misspelled Hawaiian words. These
+are some of the words that are misspelled in Hawaiian
+but not English:
+one
+op
+ope
+open
+own
+p
+paul
+pe
+pell
+pi
+plain
+plea
+pu
+u
+ui
+ula
+
+
+H O M E W O R K
+1. Writing find-ascii-text was the hardest part of the homework. I knew
+that I had to iterate through each file input parameter and check if it
+was a directory. If it is a directory, I knew I had to (1) recursively
+call the function, otherwise (2) say whether it was UTF or ASCII.
+Figuring out how to actually implement (2) was extremely challenging
+as I am unfamiliar with the syntax. I did (1) by cd'ing into the
+directory and then recursively calling the function on all files in
+the directory (through ls). Then I cd'ed out of the directory. Otherwise,
+I used the file -b command to get a description of the encoding of the
+file and passed it into grep to see if it had the desired
+string (ASCII) in it.
+2. After the many hours spent on #1, #2 felt like a breeze. I simply
+changed all signs of UTF-8 to ASCII (i.e. renamed function from find
+_utf to find_ascii).
+3. I used the head command to get the first line of the file, and
+compared it against the string "-*- coding: utf-8 -*-" (without the quotes).
+I used the continue to move on if this was not the first line. If it was
+not the first line, I printed the file name.
+4. I switched the signs of UTF-8 back to ASCII and got rid
+of the continue, replacing it
+with echo $var to say that file had the line in its first line.
+
+

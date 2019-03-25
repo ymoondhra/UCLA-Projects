@@ -1,0 +1,64 @@
+1.
+This log documents the actions I took in the homework part of
+Assignment 9.
+
+2.
+I cloned the git repository again using git clone. I made a new
+branch called quote by using “git checkout v3.0 -b quote”, and the
+terminal outputted a success message saying that it switched to a new
+branch called “quote”.
+
+3.
+To apply the patch to this branch, I used “patch -p1 <
+../quote-3.0-patch.txt” For some files, the terminal said that a
+reversed (or previously applied) patch was detected. I typed “y”,
+signifying continue, for each of these files.
+
+4.
+I learnt how to use the add-change-log-entry-other-window emacs
+function
+
+5.
+I went to the change log of each of the six .c files by doing
+emacs file. I accessed the change log by running “C-x 4 a” and typed
+“converted the first grave accent in strings (not comments) to
+apostrophes (')”. I exited using “C-x C-c y”
+
+6.
+git add .
+git commit -F src/ChangeLog
+These commands stage the files and then commits them.
+
+7.
+“git format-patch -1 --stdout > formatted-patch.txt” creates a patch file
+
+8.
+For this lab, Revanth Yamani is my partner. I put my
+formatted-patch.txt file on my local computer and then exchanged this
+file with Revanth. To switch to the partner branch, I did “git
+checkout v3.0 -b partner”. To apply Revanth’s patch, I did “git am
+../rev-formatted-patch.txt”, which made the terminal output that it
+was applying Revanth’s patch. I ran the following commands to test
+Revanth’s code:
+	  ./boostrap
+	  ./configure
+	  make
+	  make check
+This time, make check did not output errors
+
+9.
+Running the command “make distdir” succeeded, and one of the last
+lines of output was “|| chmod -R a+r "diffutils-3.0.1-9a75”. To open
+the changelog, I ran “emacs diffutils-3.0.1-3b1be/ChangeLog”.
+The change log was successful modified, as I could see my partner’s
+additions to the changelog of each file.
+
+10.
+When logging into lnxsrv02, I added the “-Y” option this time, which
+enables trusted X11 forwarding. I called “echo $PATH” to ensure that
+my path was correct: (/usr/local/cs/bin/: . . . ). To go to the
+appropriate directory, I ran “cd ~eggert/src/gnu/emacs”. Running the
+command “gitk” opened an instance of XQuartz. By scrolling through the
+changes made (in the top right corner of the window), I found that the
+commit on 2015-01-24 19:00:41 was the newest but not newer than
+2015-01-25. Professor Eggert made this commit.

@@ -1,0 +1,53 @@
+export PATH=/usr/local/cs/bin:$PATH
+
+Sort --version told me I have version 8.30, which is greater than 8.6.
+
+I made a bash script as follows to create the random file:
+#!/usr/bin/bash
+
+NUMBYTES=$((2**24)) NUMBYTES=$((4*$NUMBYTES)) od -An -f -N $NUMBYTES <
+/dev/urandom | tr -s ' ' '\n' > output.txt
+
+The “od” part of this command generates a random file (using
+/dev/urandom) of floating pointers (-f) of NUMBYTES. NUMBYTES is 2^24
+multiplied by four because each float is four bytes. It is passed into
+the tr command to convert the spaces into new lines, and it is finally
+outputted into output.txt.
+
+time -p sort -g output.txt > /dev/null
+real 49.70
+user 168.16
+sys 0.60
+
+time -p sort -g --parallel=1 output.txt > /dev/null
+real 167.05
+user 166.75
+sys 0.29
+
+time -p sort -g --parallel=2 output.txt > /dev/null
+real 87.43
+user 166.46
+sys 0.35
+
+time -p sort -g --parallel=4 output.txt > /dev/null
+real 49.56
+user 168.19
+sys 0.56
+
+time -p sort -g --parallel=8 output.txt > /dev/null
+real 49.92
+user 168.88
+sys 0.66
+
+The time difference between using 4 and 8 threads was minimal when I
+ran these commands. This could be because other people were using the
+server more when I ran the time command with 8 threads versus when I
+ran the time command with 4 threads. The CPU of the server I am on has
+a limited number of threads.
+
+Nevertheless, the commands using one and two threads definitely took a
+significantly less amount of time than the commands with 4 and 8
+threads. The default sort command most likely automatically uses
+either 4 or 8 threads. I would guess 8.
+
+

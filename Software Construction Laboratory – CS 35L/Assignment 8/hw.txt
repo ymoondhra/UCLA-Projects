@@ -1,0 +1,16 @@
+1.  The bytes would still be secure because they can only
+be decrypted with the private key, which the intruders would not have
+access to. (1): If other teams tapped my keyboard after signing in,
+they would not be able to use that information to gain access to the
+database, so it would still be secure. This is because the content
+would still be encrypted. (2): If we were using a USB and the other
+teams got access to it, it is not secure anymore because the intruders
+would have access to both the public and private keys.
+
+2.  “gpg2 --verify” does not verify the owner of the file. This is
+because it only compares the signature (decrypted using the public
+key) with the appropriate data. One could easily use the public key to
+generate their own signature and send that. The gpg command will just
+decrypt the signature properly and not output any errors. This problem
+could potentially be fixed by keeping track of the origin of the
+creator of the file.

@@ -1,0 +1,241 @@
+1.  In my trivial.c program, I included the stdio.h and math.h
+libraries. My int main() function had one line: printf("The value of
+cos(sqrt(3.0)) is %.17g\n", cos(sqrt(3.0)));
+
+When I compiled it using “gcc trivial.c -o trivial” and ran it using
+“./trivial”. It outputted “The value of cos(sqrt(3.0)) is
+-0.16055653857469052”.
+
+2.  I ran “ldd trivial”, which outputted: linux-vdso.so.1 =>
+(0x00007ffde2b2a000) libc.so.6 => /lib64/libc.so.6 (0x00007fa5643ed000)
+/lib64/ld-linux-x86-64.so.2 (0x00007fa5647ba000) We can see the dynamic
+libraries by ignoring the byte values, which I presume are memory
+locations.
+
+3.  I ran strace -c ./trivial to tell me which system calls were used and
+how many (26 calls).  Then, I ran strace ./trivial 2> strace.txt to put the
+output of the strace into a text file.  -Mmap: puts/“maps” the dynamic
+library within the program’s memory. Mmap was called 8 times.  -Open and
+Close: the first time open was called, it opened a file that gave all the
+paths to all the dynamic libraries (cat /etc/ld.so.cache). Close was called
+on this file. Then, open was called on the appropriate path to the
+appropriate dynamic library given by the last file. Close was then called
+on this file as well -Read reads the dynamic library -fstat: cat strace.txt
+| grep "fstat" returned three lines of output. Two were about a file, and
+one was for stdout.
+
+4.
+I ran “ls /usr/bin | awk 'NR%101==105010814%101'”, which outputted:
+
+5 and 6.
+This is the bash script I created for parts 5 and 6:
+#!/usr/bin/bash                                                                 
+
+in=($(ls /usr/bin | awk 'NR%101==105010814%101'))
+
+for i in "${in[@]}";
+do
+    echo `ldd /usr/bin/$i` |
+#------------------------------------------------
+tr " " "\n" | #take out spaces, separate each on new line
+grep -E "^l" >> o.txt     #only take dynamic libraries                             
+	#------------------------------------------------
+done
+
+The part in between the two sets of commented out dashes
+(#------------------------------------------------) is for part 6. If you
+take those out, it gives you the appropriate information for part 5.
+
+5.  The error that came up when I ran the code for part 5 is that not all
+the inputs are dynamic executables, so the ldd command could not run on
+them: Dbilogstrip Findsmb Pm-is-supported Pocount Thresholder.py After
+running the “file /usr/bin/…” command on these files, I found that they
+were either Perl, POSIX, or Python scripts.
+
+6.  After running ldd.sh, I ran the command: cat o.txt | sort -u >
+oo.txt. I tried putting this sort -u command in the actual ldd.sh file, but
+the sorting was not working for some reason. Here are the libraries:
+
+
+libaddns-samba4.so
+libaesni-intel-samba4.so
+libasn1util-samba4.so
+libattr.so.1
+libauthkrb5-samba4.so
+libblkid.so.1
+libbz2.so.1
+libcairo.so.2
+libcap.so.2
+libCHARSET3-samba4.so
+libcliauth-samba4.so
+libcli-cldap-samba4.so
+libcli-ldap-common-samba4.so
+libcli-nbt-samba4.so
+libcli-smb-common-samba4.so
+libcom_err.so.2
+libcommon-auth-samba4.so
+libcroco-0.6.so.3
+libcrypto.so.10
+libcrypt.so.1
+libc.so.6
+libdbus-1.so.3
+libdbwrap-samba4.so
+libdcerpc-binding.so.0
+libdcerpc-samba-samba4.so
+libdevmapper.so.1.02
+libdl.so.2
+libdw.so.1
+libEGL.so.1
+libelf.so.1
+libexpat.so.1
+libexslt.so.0
+libfam.so.0
+libffi.so.6
+libflag-mapping-samba4.so
+libfontconfig.so.1
+libfreebl3.so
+libfreetype.so.6
+libfribidi.so.0
+libgcc_s.so.1
+libgcrypt.so.11
+libgdk_pixbuf-2.0.so.0
+libgenrand-samba4.so
+libgensec-samba4.so
+libgio-2.0.so.0
+libGLdispatch.so.0
+libglib-2.0.so.0
+libGL.so.1
+libGLX.so.0
+libgmodule-2.0.so.0
+libgobject-2.0.so.0
+libgpg-error.so.0
+libgraphite2.so.3
+libgse-samba4.so
+libgssapi_krb5.so.2
+libgssrpc.so.4
+libgthread-2.0.so.0
+libhangul.so.1
+libharfbuzz.so.0
+libICE.so.6
+libinterfaces-samba4.so
+libiov-buf-samba4.so
+libk5crypto.so.3
+libkadm5clnt_mit.so.11
+libkdecore.so.5
+libkeyutils.so.1
+libkpathsea.so.6
+libkrb5samba-samba4.so
+libkrb5.so.3
+libkrb5support.so.0
+liblber-2.4.so.2
+libldap-2.4.so.2
+libldbsamba-samba4.so
+libldb.so.1
+liblibcli-lsa3-samba4.so
+liblibsmb-samba4.so
+liblz4.so.1
+liblzma.so.5
+libmessages-dgm-samba4.so
+libmessages-util-samba4.so
+libmount.so.1
+libmsghdr-samba4.so
+libm.so.6
+libmsrpc3-samba4.so
+libndr-krb5pac.so.0
+libndr-nbt.so.0
+libndr-samba-samba4.so
+libndr.so.0
+libndr-standard.so.0
+libnetpbm.so.11
+libnsl.so.1
+libnspr4.so
+libnss3.so
+libnssutil3.so
+libpango-1.0.so.0
+libpangocairo-1.0.so.0
+libpangoft2-1.0.so.0
+libpcre.so.1
+libpixman-1.so.0
+libplc4.so
+libplds4.so
+libpng15.so.15
+libpopt-samba3-samba4.so
+libpopt.so.0
+libpthread.so.0
+libQtCore.so.4
+libQtDBus.so.4
+libQtNetwork.so.4
+libQtXml.so.4
+libreplace-samba4.so
+libresolv.so.2
+librols.so.0
+librsvg-2.so.2
+librt.so.1
+libsamba3-util-samba4.so
+libsamba-cluster-support-samba4.so
+libsamba-credentials.so.0
+libsamba-debug-samba4.so
+libsamba-errors.so.1
+libsamba-hostconfig.so.0
+libsamba-modules-samba4.so
+libsamba-security-samba4.so
+libsamba-sockets-samba4.so
+libsamba-util.so.0
+libsamdb-common-samba4.so
+libsamdb.so.0
+libsasl2.so.3
+libsecrets3-samba4.so
+libselinux.so.1
+libsepol.so.1
+libserver-id-db-samba4.so
+libserver-role-samba4.so
+libsmbconf.so.0
+libsmbd-shim-samba4.so
+libsmb-transport-samba4.so
+libsmime3.so
+libSM.so.6
+libsocket-blocking-samba4.so
+libssl3.so
+libssl.so.10
+libss.so.2
+libstdc++.so.6
+libsys-rw-samba4.so
+libsystemd-daemon.so.0
+libsystemd-journal.so.0
+libsystemd.so.0
+libtalloc-report-samba4.so
+libtalloc.so.2
+libtdb.so.1
+libtdb-wrap-samba4.so
+libtevent.so.0
+libtevent-util.so.0
+libthai.so.0
+libtic.so.5
+libtime-basic-samba4.so
+libtinfo.so.5
+libudev.so.1
+libusal.so.0
+libutil-cmdline-samba4.so
+libutil-reg-samba4.so
+libutil-setid-samba4.so
+libutil.so.1
+libutil-tdb-samba4.so
+libuuid.so.1
+libwbclient.so.0
+libwinbind-client-samba4.so
+libX11.so.6
+libXau.so.6
+libXaw3d.so.8
+libxcb-render.so.0
+libxcb-shm.so.0
+libxcb.so.1
+libXext.so.6
+libXinerama.so.1
+libxml2.so.2
+libXmu.so.6
+libXpm.so.4
+libXrender.so.1
+libxslt.so.1
+libXt.so.6
+libz.so.1
+linux-vdso.so.1

@@ -1,0 +1,65 @@
+LAB:
+First, I created a new directory called bug and downloaded the coreutils
+file in it using wget https://web.cs.ucla.edu/classes/winter19/cs35L/assign/coreutils-with-bug.tar.gz. 
+I unzipped the tar file using tar xvf coreutilsbug.tar.gz, cd’ed into the new directory, and configured it using “./configure”. 
+This is the error I got when I tried to use “make” in the coreutils-with-bug directory:
+
+if gcc -DHAVE_CONFIG_H -DLIBDIR=\"/usr/local/lib\" -I. -I. -I..  -I.. -I.   -g -O2 -MT allocsa.o -MD -MP -MF ".deps/allocsa.Tpo" -c -o allocsa.o allocsa.c;
+then mv -f ".deps/allocsa.Tpo" ".deps/allocsa.Po"; else rm -f ".deps/allocsa.Tpo"; exit 1; fi
+. . . . . . . . . .
+. . . . . . . . . .
+In file included from utimecmp.c:41:
+utimens.h:2:5: error: conflicting types for 'futimens'
+ int futimens (int, char const *, struct timespec const [2]);
+     ^~~~~~~~
+
+I learned that futimens is a standard library function by doing “man futimens”. I then went into utimens.c to see that there was a function declaration
+by the name of futimens. We can see that the problem is that futimens has been defined twice. First, the parameters are int, char const *, and struct.
+In the second time, they are int, and const struct. 
+
+I downloaded the diff file patch using wget and moved it into the coreutils folder. I used command “patch -p0 < coreutils.diff” to apply the patches and
+re-configured and re-made the coreutils file using “./configure --prefix /u/cs/ugrad/moondhra/cs35/lab4/bug/coreutils-with-bug” and “make.” This produced
+a lot of output and fixed the original problem by changing the declaration of the futimens within utimens.c to “coreutils_futimens”. This way, it does not
+redefine the standard library function futimens(). It does the same with the standard library function “tee.”
+
+I used the command “make install” and reproduced the bug by following the example code that the lab spec provided, except I used mkdir tmp instead of making
+a temporary directory. My choice of debugger is gdb, so I ran “gdb /u/cs/ugrad/moondhra/cs35/lab4/bug/coreutils-with-bug/bin/ls” and “set args -lt --full-time”
+to set the arguments. By scroll through the function descriptions using “info functions”, I noticed the function “compstr_mtime”, which calls cmp_mtime, so I
+set a breakpoint at cmp_mtime using “break cmp_mtime” and called “run”. It calls “timespec_cmp”, so I changed my breakpoint to that function and found its
+source code in “timespec.h”:
+timespec_cmp (struct timespec a, struct timespec b)
+{
+  int diff = a.tv_sec - b.tv_sec;
+  return diff ? diff : a.tv_nsec - b.tv_nsec;
+}
+
+After stepping through using gdb and accessing the variable values, I found that it was a
+C problem that was causing this bug: large differences caused overflow. 
+
+Since qsort only cares whether the comparator function returns position, negative, or 0, we don’t care about the actual difference between the a and b.
+We just want to know if they are equal or one is greater. 
+
+I created a copy of the file with this function using: “cp timespec.h newtimespec.h”, and changed the code to what I wanted, and created a new patch file
+using “diff -u timespec.h newtimespec.h > lab4.diff.” This command took the difference between the two files and put them in a new file called lab4.diff.
+The option “-u” in the diff linux command created plus signs next to my new lines of code. To apply the patch, I did “patch -p0 < lab4.diff” and ran the set-up commands again. 
+
+Using C-x 4a in it, I wrote the following description.
+2019-02-10  Yash Moondhra  <moondhra@lnxsrv09.seas.ucla.edu>
+
+        * timespec.h: Avoid signed overflow by comparing the appropriate values of a and b, rather than subtracting them.
+
+To test my patch, I cd’ed into the tmp folder and ran: TZ=UTC0 /u/cs/ugrad/moondhra/cs35/lab4/bug/coreutils-with-bug/bin/ls
+-lt --full-time wwi-armistice now now1. This was the output:
+-rw-r--r-- 1 moondhra csugrad 0 2019-02-07 19:33:11.908112000 +0000 now1
+-rw-r--r-- 1 moondhra csugrad 0 2019-02-07 19:33:05.865542000 +0000 now
+-rw-r--r-- 1 moondhra csugrad 0 2054-12-17 17:28:16.000000000 +0000 wwi-armistice
+
+These files were outputted in the right order. 
+
+To reproduce the problem in my home directory:
+I went to the home directory (cd ~), created the files now, now1, and wwi-armistice, and used the ls command format
+from the assignment page. This was the command and output:
+$ TZ=UTC0 ls -lt --full-time wwi-armistice now now1
+-rw-r--r-- 1 moondhra csugrad 0 2054-12-17 17:28:16.000000000 +0000 wwi-armistice
+-rw-r--r-- 1 moondhra csugrad 0 2019-02-10 19:16:04.045531000 +0000 now1
+-rw-r--r-- 1 moondhra csugrad 0 2019-02-10 19:15:59.438097000 +0000 now
