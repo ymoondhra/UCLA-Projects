@@ -7,13 +7,13 @@ This is a collection of some of my best coding projects assigned by UCLA courses
 * Method: Wrote a research paper and did a ten-minute presentation in front of my class about a sonnet-generating algorithm created at Duke University
 
 ### Assignment 9: Change management ###
-* Goal: Master version control by editing the change log, using the functionality of branches, and implementing patches
+* Goal: Master version control by editing the changelog, using the functionality of branches, and implementing patches
 * Method: Downloaded a version of a library called "diffutils" and applied changes in a multitude of ways (e.g. through emacs)
 * Language(s): Git, Bash
 
 ### Assignment 8: SSH setup and use in applications ###
 * Goal: Experience asymmetric cryptography by "hacking" into someone's BeagleBone and learn how to create public keys
-* Method: Logged into my partner's BeagleBone, managed authetication using ssh-agent, and ran commands on his BeagleBone
+* Method: Logged into my partner's BeagleBone, managed authentication using ssh-agent, and ran commands on his BeagleBone
 * Language(s): Bash
 
 ### Assignment 7: Dynamic linking ###
