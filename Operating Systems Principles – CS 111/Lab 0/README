@@ -1,0 +1,23 @@
+NAME: Yash Moondhra
+EMAIL: ymoondhra@gmail.com
+ID: 123456789
+
+Description of Files:
+     -lab0.c: the C program source code of this project. The purpose this program serves is to mimic any input it has into an output. For example, if the user types in "boat" in the standard input, the program outputs "boat" in the standard output. It utilizes the getopt_long() function to parse the arguments it offers. --input=filename allows the user to pass in input to the program from a file called filename. --output=filename stores the output of the program into a file called filename. --segfault creates a segmentation fault, and --catch catches the fault before it happens, exiting with a return value.  
+     -Makefile: allows the user to run two-word commands as shortcuts. For example, "make" runs the gcc command to compile the c file to create an executable. "make check" runs test cases on the lab0 executable discussed later. "make clean" removes the files used in "make check" and "make dist". "make dist" creates a tarball with 5 files. 
+     -backtrace.png: a screenshot of the stack backtrace in gdb when running the program with argument --segfault. 
+     -breakpoint.png: a screenshot of the value of the poiinter in gdb running the program with argument --segfault at the breakpoint right before the segmentation fault is caused.  
+
+Test Cases for make check in Makefile
+     - The first test checks to see if the --input and --output options return value 0, signfying that they read the input file and wrote to the output file properly.
+     - The second test checks that the input and output files from the previous test case are identical, meaning that the program functioned as desired.
+     - The third test checks if the proper return value is returned when the program cannot read the input file due to a lack of permission.
+     - The fourth test checks if the proper return value is returned when the program cannot write to the output file due to a lack of permission.
+     - The fifth test checks to see that the segmentation fault created is caught when the --catch option is used along with the --segfault option.
+
+Other Information
+      - Code Sources:
+      Checking file permissions in c: https://stackoverflow.com/questions/1430240/c-read-a-files-permissions
+      - Limitations: I have never used getopt_long() before and there is not much documentation about it outside of the lengthy manual pages. There were many limitations in debugging the Makefile. Creating the bash script was difficult as I am unfamiliar the syntax - every space matters. For example, I found out that I had to use "$$?" instead of "$?" to refer to the return value of the previous command.
+      - Methodology: First, I made the lab0.c program have the simple function of reading and writing the standard input to standard output. Then, without changing this code, I built the options one at a time, starting with --input and then moving to --output, --segfault, and finally --catch.
+      - Testing: I tested the options in the order I created them.

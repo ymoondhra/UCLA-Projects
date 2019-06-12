@@ -1,0 +1,19 @@
+#NAME: Yash Moondhra
+#EMAIL: ymoondhra@gmail.com
+#ID: 123456789
+
+Description of Files:
+* LAB1B-CLIENT.C: This c program serves as the client in this client-server connecting program. The client creates a socket, connects with a server's socket, and then is able to write to the server's socket with non-canonical input as a bash terminal. A user must provide a port number and also has the option to store the sent and received byte information by using the log option. The user can also send the data as compressed using the --compress option.
+* LAB1B-SERVER.C: This c program serves as the server. It creates a socket, waits for the user to connect, receives input from the client, interprets the data, and sends output back to the client. The user of the program has the option to have the --compress option, which decompresses the received data and sends it back as compressed to the client. 
+* Makefile: to create the program, run `make clean`, `make`, and then `make dist`. The first command deletes the files created by make and make dist. The second command builds two executables from lab1b-client.c and lab1b-server.c. The final command builds the tar file to compress the program.
+* README: Describes the files and sources I used to create this program.
+
+
+Sources:
+FROM LAB1A
+* I heavily relied on the following source as guidance for how to properly implement noncanonical mode for the terminal: https://www.gnu.org/software/libc/manual/html_node/Noncanon-Example.html
+* To understand how to properly use POLLIN, POLLHUP, and POLLERR: http://www.linux-mag.com/id/357/
+FROM LAB1B
+* To understand how compression works: https://www.zlib.net/manual.html and https://www.zlib.net/zlib_how.html
+* http://beej.us/guide/bgnet/html/multi/clientserver.html
+* To create a socket and client: http://www.cs.rpi.edu/~moorthy/Courses/os98/Pgms/client.c and http://www.cs.rpi.edu/~moorthy/Courses/os98/Pgms/socket.html

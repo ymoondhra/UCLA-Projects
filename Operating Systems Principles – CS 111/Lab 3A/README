@@ -1,0 +1,8 @@
+NAME: Shubhrose Singh, Yash Moondhra
+EMAIL: shubhroses@gmail.com, ymoondhra@gmail.com
+ID: 987654321, 123456789
+
+Description of files:
+	    * lab3a.c : A c program that takes a file system image as input and analyzes it via EXT2 specifications to gather information about various components of the input, such as the superblock, block bit map, and free inodes. 
+	    * Makefile: Allows us to build the lab3a.c program into an executable, cleans files it created in the process (make clean), and creates a tarball containing the c program.
+	    * README: Outlines the description of each file of the tarball.     

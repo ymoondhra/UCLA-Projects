@@ -1,0 +1,65 @@
+#NAME: Yash Moondhra
+#EMAIL: ymoondhra@gmail.com
+#ID: 123456789
+
+Question 2.3.1
+Where do you believe most of the cycles are spent in the 1 and 2-thread list tests ?
+      Most of the cycles are spent executing the actual list code (e.g. insertion, length check, and deletion) instead of the overhead created by threading. This is because there is a low probability that the threads will collide. 
+
+Why do you believe these to be the most expensive parts of the code?
+    These are the most expensive parts of the code because the chance of contention is low. Therefore, there is not much time being wasted on threads waiting on each other to complete, so most time is spent actually executing the code.
+
+Where do you believe most of the time/cycles are being spent in the high-thread spin-lock tests?
+	For high-thread spin-lock tests, the probability of contention is high, so oftentimes threads are waiting for another thread to finish using the lock. The cycles of CPU are not used, which causes the number of operations per second (throughput) to decrease.
+
+Where do you believe most of the time/cycles are being spent in the high-thread mutex tests?
+	Most of the time is being spent actually running the instructions rather than waiting because the mutex lock puts the waiting thread to sleep while the piece of data it is waiting for is currently being used. Once the lock is freed, we awaken the thread. This is more efficient that spin-locks as it produces a higher throughput, which is supported by the graphs.
+
+
+
+Question 2.3.2
+Where (what lines of code) are consuming most of the cycles when the spin-lock version of the list exerciser is run with a large number of threads?
+	By examining the profile.out file, I found that the code was taking the most time in the individual thread function I created (listFunction). Within this function, much of the time was spent in the function to insert the nodes into the list. More specifically, the specific instruction that took the most time was the while loop to wait for the lock:
+	`while(__sync_lock_test_and_set(&spin, 1));`
+
+Why does this operation become so expensive with large numbers of threads?
+	As we increase the threads, the probability that multiple threads may attempt to access the same piece of memory at any given nanosecond increases. While these threads are waiting, they are consuming CPU cycles rather than executing the actual lines of code of the program, as they are stuck in the while loop mentioned in the previous part of this question. 
+
+
+
+Question 2.3.3
+Look at the average time per operation (vs. # threads) and the average wait-for-mutex time (vs. #threads).
+Why does the average lock-wait time rise so dramatically with the number of contending threads?
+	The average lock-wait time rises so dramatically as we increase the number of threads because there is a higher probability that multiple threads will attempt to access the same shared piece of memory, which forces all except one thread to wait for that one thread to finish using that piece of memory. This waiting process must repeat every time there are multiple threads that need the same block. The reason the wait time increases so dramatically is that more than a few threads may be waiting for the same lock, which causes them to have no throughput for that period of time.
+
+Why does the completion time per operation rise (less dramatically) with the number of contending threads?
+    The completion time per operations rises less dramatically because the number of threads of the program actually does affect the completion time, just not as much as it affects the wait time. This is because context switching caused by the threads causes the cache to not optimally correspond with the current thread running. In other words, the cache is not being used to its full potential when we have many threads running because of context switches.  
+
+How is it possible for the wait time per operation to go up faster (or higher) than the completion time per operation?
+	The wait time per operation goes up faster than the completion time per operation because the latter is not as dependent on the number of threads as the former is. 
+
+
+
+Question 2.3.4
+Explain the change in performance of the synchronized methods as a function of the number of lists.
+	As we increase the number of lists, we are able to take advantage of synchronization as the threads will not be competing for access as much. This is supported by the fact that each line in lab2b_4.png has a higher throughput at nearly all points that the lines under it, which all have less lists. This is because if two threads are accessing the list at once, there is a 50% (2 lists) or more chance (more lists) that it will not be the same as the other thread. The drawback of this is that it requires more memory usage. 
+
+Should the throughput continue increasing as the number of lists is further increased? If not, explain why not.
+	The throughput will continue increasing as the number of lists is further increased. This is because as we increase the number of lists, the chance of two or more threads trying to access the same list decreases, assuming that the hash function (roughly) evenly distributes the nodes across those lists. However, there is a maximum for how much the usage of multiple lists can contribute to the throughput of the program.
+
+It seems reasonable to suggest the throughput of an N-way partitioned list should be equivalent to the throughput of a single list with fewer (1/N) threads. Does this appear to be true in the above curves? If not, explain why not.
+	This statement is pretty accurate, but we must take into account that the hash function will not perfectly distribute the nodes across the different lists, so the lists with more nodes will have a higher probability of contention as there is a higher chance that multiple threads will need to access elements at the same time within that list. This appears to be true about the curves we created, as they roughly follow the pattern: y = 1/x. 
+
+Description of Files:
+* lab2_list.c: a C program that creates that creates threads which insert elements in sorted order to a SortedList object, get the length of the list, and then delete all the elements. The --list option can be used to create multiple sub-lists to take advantage of synchronization.
+* SortedList.h: the header file which defines the structure of the SortedList object, which represents a doubly linked list of nodes with c string keys
+* SortedList.c: the implementations for four list functions: insert, length, lookup, and delete
+* lab2_list.csv: the comma-separated data for testing lab2_list.c
+* Makefile: `make` creates the executables for lab2_list.c.c. `make tests` creates the data for the csv file described above. `make graphs` creates the graphs which depict the trends from the csv data
+* the .png files are the graphs created by running the .gp file. The .gp file analyzes the data from the .csv files. 
+* profile.out: a textual depiction of where time was spent when we use the --sync=s (spinlock) option for the lab2_list program
+
+
+
+Sources:
+* Hash Function Implementation :  http://www.cse.yorku.ca/~oz/hash.html

@@ -1,0 +1,12 @@
+#NAME: Shubhrose Singh, Yash Moondhra
+#EMAIL: shubhroses@gmail.com, ymoondhra@gmail.com
+#ID: 987654321, 123456789
+
+lab3b.py
+	A python program that checks file system report for Block Consistency, I-Node Allocaiton, and Directory Consistency. 
+
+README: 
+	File containing description of files submitted in the project
+
+Makefile:
+	Build and runs our python program by creating a symbolic link lab3b.sh which executes lab3b.py. Dist target creates tarball for submissions and clean target removes unnecessary files. 

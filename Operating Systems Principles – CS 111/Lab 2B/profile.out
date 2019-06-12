@@ -1,0 +1,246 @@
+Total: 1049 samples
+     522  49.8%  49.8%      620  59.1% insert_to_list
+     346  33.0%  82.7%     1049 100.0% listFunction
+     131  12.5%  95.2%      131  12.5% __strcmp_sse42
+      26   2.5%  97.7%       98   9.3% SortedList_insert
+      17   1.6%  99.3%       82   7.8% SortedList_lookup
+       6   0.6%  99.9%        6   0.6% _init
+       1   0.1% 100.0%        1   0.1% SortedList_length
+       0   0.0% 100.0%     1049 100.0% __clone
+       0   0.0% 100.0%     1049 100.0% start_thread
+ROUTINE ====================== listFunction in /u/cs/ugrad/moondhra/cs111/proj2b/lab2_list.c
+   346   1049 Total samples (flat / cumulative)
+     .      .   89:     }
+     .      .   90:     
+     .      .   91:   }
+     .      .   92: }
+     .      .   93: 
+---
+     .      .   94: void * listFunction(void* threadNum) {
+     .      .   95:   int currThread = *((int *) threadNum);
+     .      .   96:   int f = currThread;
+     .      .   97:   int end = nthreads * iterations;
+     .    620   98:   insert_to_list(f, end);
+     .      .   99: 
+     .      .  100:   //LENGTH
+     .      .  101:   int length = 0;
+     .      .  102:   int u = 0;
+     .      .  103:   for(u = 0; u < lists; u++) {
+     .      .  104:     if(s) {
+     .      .  105:       struct timespec startTimer;
+     .      .  106:       if(clock_gettime(CLOCK_MONOTONIC, &startTimer) == -1) {
+     .      .  107: 	fprintf(stderr, "Error: could not get time");
+     .      .  108: 	exit(1);
+     .      .  109:       }
+     1      1  110:       while(__sync_lock_test_and_set(&spin[u], 1));
+     .      .  111:       struct timespec endTimer;
+     .      .  112:       clock_gettime(CLOCK_MONOTONIC, &endTimer);
+     .      .  113:       long long threadWaitTime = (1000000000 * endTimer.tv_sec) - (1000000000 * startTimer.tv_sec) + endTimer.tv_nsec - startTimer.tv_nsec;
+     .      .  114:       elapsed[currThread] += threadWaitTime;
+     .      1  115:       length += SortedList_length(list[u]);
+     .      .  116:       __sync_lock_release(&spin[u]);
+     .      .  117:     }
+     .      .  118:     else if(m) {
+     .      .  119:       struct timespec startTimer;
+     .      .  120:       if(clock_gettime(CLOCK_MONOTONIC, &startTimer) == -1) {
+     .      .  121: 	fprintf(stderr, "Error: could not get time");
+     .      .  122: 	exit(1);
+     .      .  123:       }
+     .      .  124:       pthread_mutex_lock(&lock[u]);
+     .      .  125:       struct timespec endTimer;
+     .      .  126:       clock_gettime(CLOCK_MONOTONIC, &endTimer);
+     .      .  127:       long long threadWaitTime = (1000000000 * endTimer.tv_sec) - (1000000000 * startTimer.tv_sec) + endTimer.tv_nsec - startTimer.tv_nsec;
+     .      .  128:       elapsed[currThread] += threadWaitTime;
+     .      .  129:       length += SortedList_length(list[u]);
+     .      .  130:       pthread_mutex_unlock(&lock[u]);
+     .      .  131:     }
+     .      .  132:     else {
+     .      .  133:       length += SortedList_length(list[u]);
+     .      .  134:     }
+     .      .  135:   }
+     .      .  136:   if(length == -1) {
+     .      .  137:     fprintf(stderr, "Error: improper list length from thread number: %d", currThread);
+     .      .  138:     exit(2);
+     .      .  139:   }
+     .      .  140: 
+     .      .  141:   
+     .      .  142:   for(f = currThread; f < end; f+= nthreads) {
+     .      .  143:     const char * elementKey = listElements[f].key;
+     .      .  144:     unsigned long hashVal = hash(elementKey)%lists;
+     .      .  145:     int d = hashVal;
+     .      .  146:     SortedListElement_t* t;
+     .      .  147:     if(s) {
+     .      .  148:       struct timespec startTimer;
+     .      .  149:       if(clock_gettime(CLOCK_MONOTONIC, &startTimer) == -1) {
+     .      .  150: 	fprintf(stderr, "Error: could not get time");
+     .      .  151: 	exit(1);
+     .      .  152:       }
+   345    345  153:       while(__sync_lock_test_and_set(&spin[d], 1));
+     .      .  154:       struct timespec endTimer;
+     .      .  155:       clock_gettime(CLOCK_MONOTONIC, &endTimer);
+     .      .  156:       long long threadWaitTime = (1000000000 * endTimer.tv_sec) - (1000000000 * startTimer.tv_sec) + endTimer.tv_nsec - startTimer.tv_nsec;
+     .      .  157:       elapsed[currThread] += threadWaitTime;
+     .     82  158:       t = SortedList_lookup(list[d], listElements[f].key);
+     .      .  159:       if(SortedList_delete(t)) {
+     .      .  160: 	fprintf(stderr, "Error: could not delete element in thread %d", currThread);
+     .      .  161: 	exit(2);
+     .      .  162:       }
+     .      .  163:       __sync_lock_release(&spin[d]);
+     .      .  164:     }
+     .      .  165:     else if(m) {
+     .      .  166:       struct timespec startTimer;
+     .      .  167:       if(clock_gettime(CLOCK_MONOTONIC, &startTimer) == -1) {
+     .      .  168: 	fprintf(stderr, "Error: could not get time");
+     .      .  169: 	exit(1);
+     .      .  170:       }
+     .      .  171:       pthread_mutex_lock(&lock[d]);
+     .      .  172:       struct timespec endTimer;
+     .      .  173:       clock_gettime(CLOCK_MONOTONIC, &endTimer);
+     .      .  174:       long long threadWaitTime = (1000000000 * endTimer.tv_sec) - (1000000000 * startTimer.tv_sec) + endTimer.tv_nsec - startTimer.tv_nsec;
+     .      .  175:       elapsed[currThread] += threadWaitTime;
+     .      .  176:       t = SortedList_lookup(list[d], elementKey);
+     .      .  177:       if(SortedList_delete(t)) {
+     .      .  178: 	fprintf(stderr, "Error: could not delete element in thread %d", currThread);
+     .      .  179: 	exit(2);
+     .      .  180:       }
+     .      .  181:       pthread_mutex_unlock(&lock[d]);
+     .      .  182:     }
+     .      .  183:     else {
+     .      .  184:       t = SortedList_lookup(list[d], elementKey);
+     .      .  185:       if(SortedList_delete(t)) {
+     .      .  186: 	fprintf(stderr, "Error: could not delete element in thread %d", currThread);
+     .      .  187: 	exit(2);
+     .      .  188:       }
+     .      .  189:     }
+     .      .  190:     if(t == NULL) {
+     .      .  191:       fprintf(stderr, "Error: could not find element in thread %d", currThread);
+     .      .  192:       exit(2);
+     .      .  193:     }
+     .      .  194:   }
+     .      .  195:   
+     .      .  196:   return NULL;
+     .      .  197: }
+---
+     .      .  198: 
+     .      .  199: void print_data(struct timespec start, struct timespec end) {
+     .      .  200:   char yieldOptions[10] = "";
+     .      .  201:   char none[10] = "none";
+     .      .  202:   if(i) {
+ROUTINE ====================== listFunction in /u/cs/ugrad/moondhra/cs111/proj2b/lab2_list.c
+   346   1049 Total samples (flat / cumulative)
+     .      .   89:     }
+     .      .   90:     
+     .      .   91:   }
+     .      .   92: }
+     .      .   93: 
+---
+     .      .   94: void * listFunction(void* threadNum) {
+     .      .   95:   int currThread = *((int *) threadNum);
+     .      .   96:   int f = currThread;
+     .      .   97:   int end = nthreads * iterations;
+     .    620   98:   insert_to_list(f, end);
+     .      .   99: 
+     .      .  100:   //LENGTH
+     .      .  101:   int length = 0;
+     .      .  102:   int u = 0;
+     .      .  103:   for(u = 0; u < lists; u++) {
+     .      .  104:     if(s) {
+     .      .  105:       struct timespec startTimer;
+     .      .  106:       if(clock_gettime(CLOCK_MONOTONIC, &startTimer) == -1) {
+     .      .  107: 	fprintf(stderr, "Error: could not get time");
+     .      .  108: 	exit(1);
+     .      .  109:       }
+     1      1  110:       while(__sync_lock_test_and_set(&spin[u], 1));
+     .      .  111:       struct timespec endTimer;
+     .      .  112:       clock_gettime(CLOCK_MONOTONIC, &endTimer);
+     .      .  113:       long long threadWaitTime = (1000000000 * endTimer.tv_sec) - (1000000000 * startTimer.tv_sec) + endTimer.tv_nsec - startTimer.tv_nsec;
+     .      .  114:       elapsed[currThread] += threadWaitTime;
+     .      1  115:       length += SortedList_length(list[u]);
+     .      .  116:       __sync_lock_release(&spin[u]);
+     .      .  117:     }
+     .      .  118:     else if(m) {
+     .      .  119:       struct timespec startTimer;
+     .      .  120:       if(clock_gettime(CLOCK_MONOTONIC, &startTimer) == -1) {
+     .      .  121: 	fprintf(stderr, "Error: could not get time");
+     .      .  122: 	exit(1);
+     .      .  123:       }
+     .      .  124:       pthread_mutex_lock(&lock[u]);
+     .      .  125:       struct timespec endTimer;
+     .      .  126:       clock_gettime(CLOCK_MONOTONIC, &endTimer);
+     .      .  127:       long long threadWaitTime = (1000000000 * endTimer.tv_sec) - (1000000000 * startTimer.tv_sec) + endTimer.tv_nsec - startTimer.tv_nsec;
+     .      .  128:       elapsed[currThread] += threadWaitTime;
+     .      .  129:       length += SortedList_length(list[u]);
+     .      .  130:       pthread_mutex_unlock(&lock[u]);
+     .      .  131:     }
+     .      .  132:     else {
+     .      .  133:       length += SortedList_length(list[u]);
+     .      .  134:     }
+     .      .  135:   }
+     .      .  136:   if(length == -1) {
+     .      .  137:     fprintf(stderr, "Error: improper list length from thread number: %d", currThread);
+     .      .  138:     exit(2);
+     .      .  139:   }
+     .      .  140: 
+     .      .  141:   
+     .      .  142:   for(f = currThread; f < end; f+= nthreads) {
+     .      .  143:     const char * elementKey = listElements[f].key;
+     .      .  144:     unsigned long hashVal = hash(elementKey)%lists;
+     .      .  145:     int d = hashVal;
+     .      .  146:     SortedListElement_t* t;
+     .      .  147:     if(s) {
+     .      .  148:       struct timespec startTimer;
+     .      .  149:       if(clock_gettime(CLOCK_MONOTONIC, &startTimer) == -1) {
+     .      .  150: 	fprintf(stderr, "Error: could not get time");
+     .      .  151: 	exit(1);
+     .      .  152:       }
+   345    345  153:       while(__sync_lock_test_and_set(&spin[d], 1));
+     .      .  154:       struct timespec endTimer;
+     .      .  155:       clock_gettime(CLOCK_MONOTONIC, &endTimer);
+     .      .  156:       long long threadWaitTime = (1000000000 * endTimer.tv_sec) - (1000000000 * startTimer.tv_sec) + endTimer.tv_nsec - startTimer.tv_nsec;
+     .      .  157:       elapsed[currThread] += threadWaitTime;
+     .     82  158:       t = SortedList_lookup(list[d], listElements[f].key);
+     .      .  159:       if(SortedList_delete(t)) {
+     .      .  160: 	fprintf(stderr, "Error: could not delete element in thread %d", currThread);
+     .      .  161: 	exit(2);
+     .      .  162:       }
+     .      .  163:       __sync_lock_release(&spin[d]);
+     .      .  164:     }
+     .      .  165:     else if(m) {
+     .      .  166:       struct timespec startTimer;
+     .      .  167:       if(clock_gettime(CLOCK_MONOTONIC, &startTimer) == -1) {
+     .      .  168: 	fprintf(stderr, "Error: could not get time");
+     .      .  169: 	exit(1);
+     .      .  170:       }
+     .      .  171:       pthread_mutex_lock(&lock[d]);
+     .      .  172:       struct timespec endTimer;
+     .      .  173:       clock_gettime(CLOCK_MONOTONIC, &endTimer);
+     .      .  174:       long long threadWaitTime = (1000000000 * endTimer.tv_sec) - (1000000000 * startTimer.tv_sec) + endTimer.tv_nsec - startTimer.tv_nsec;
+     .      .  175:       elapsed[currThread] += threadWaitTime;
+     .      .  176:       t = SortedList_lookup(list[d], elementKey);
+     .      .  177:       if(SortedList_delete(t)) {
+     .      .  178: 	fprintf(stderr, "Error: could not delete element in thread %d", currThread);
+     .      .  179: 	exit(2);
+     .      .  180:       }
+     .      .  181:       pthread_mutex_unlock(&lock[d]);
+     .      .  182:     }
+     .      .  183:     else {
+     .      .  184:       t = SortedList_lookup(list[d], elementKey);
+     .      .  185:       if(SortedList_delete(t)) {
+     .      .  186: 	fprintf(stderr, "Error: could not delete element in thread %d", currThread);
+     .      .  187: 	exit(2);
+     .      .  188:       }
+     .      .  189:     }
+     .      .  190:     if(t == NULL) {
+     .      .  191:       fprintf(stderr, "Error: could not find element in thread %d", currThread);
+     .      .  192:       exit(2);
+     .      .  193:     }
+     .      .  194:   }
+     .      .  195:   
+     .      .  196:   return NULL;
+     .      .  197: }
+---
+     .      .  198: 
+     .      .  199: void print_data(struct timespec start, struct timespec end) {
+     .      .  200:   char yieldOptions[10] = "";
+     .      .  201:   char none[10] = "none";
+     .      .  202:   if(i) {

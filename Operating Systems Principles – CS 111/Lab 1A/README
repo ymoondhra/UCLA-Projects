@@ -1,0 +1,13 @@
+#NAME: Yash Moondhra
+#EMAIL: ymoondhra@gmail.com
+#ID: 123456789
+
+Description of Files:
+* LAB1A.C: the C program source code of this project. The purpose of this program is to create a terminal that takes in input character-by-character (rather than line-by-line). If the user passes in the --shell option, the program becomes a shell that can execute commands.
+* Makefile: to create the program, run `make clean`, `make`, and then `make dist`. The first command deletes the files created by make and make dist. The second command builds the executable from lab1a.c. The final command builds the tar file to compress the program.
+* README: Describes the files and sources I used to create this program.
+
+
+Sources:
+* I heavily relied on the following source as guidance for how to properly implement noncanonical mode for the terminal: https://www.gnu.org/software/libc/manual/html_node/Noncanon-Example.html
+* To understand how to properly use POLLIN, POLLHUP, and POLLERR: http://www.linux-mag.com/id/357/

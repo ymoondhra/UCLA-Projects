@@ -1,0 +1,29 @@
+NAME: Yash Moondhra
+EMAIL: ymoondhra@gmail.com
+ID: 123456789
+
+BEAGLEBONE DETAILS
+* Serial Number: BBGW16062681
+* MAC Address: 2CF7F1065372
+
+WIFI DETAILS
+* UCLA_WEB: wifi_2cf7f1065372_55434c415f574542_managed_none
+
+DESCRIPTION OF FILES
+* my_beaglebone.jpg: a selfie of me holding my Beaglebone
+* connected.png: proof that I named my Beaglebone and configured network access
+* copy.png: proof that I copied a C program from my local desktop to the remote Beaglebone
+* build_run.png: proof that I built and ran the C program mentioned in copy.png
+* git.png: proof that I installed git and cloned a repository
+* Makefile: `make dist` creates a tarball with the above contents, including this README and Makefile. `make clean` deletes the tarball
+
+OTHER
+* Attempting to connect the Beaglebone to the wifi wirelessly failed because the command timed out. Here are the steps I took to try to solve the problem:
+1. Connect the Beaglebone to the wifi using the wired connection (which was successful) to enable wifi and find the connection details of the wifi to connect to. 
+2. Attempt to use UCLA_WIFI_RES
+3. Go to UCLA Campus to use eduroam and UCLA_WIFI
+4. Use UCLA_WEB. I am positive that my laptop was connected to UCLA_WEB and that the beaglebone had the correct IP address for UCLA_WEB. However, WiFi still did not work.
+
+However, on the Piazza post, https://piazza.com/class/jsxs5mq464501?cid=240, the TA named Zhaoxing Bu said that the students would not need to connect to the wifi wirelessly as long as the wired connection worked. 
+* My classmate, Shubhrose Singh, has a BeagleBone that does  not properly flash with the micro sd card. I let him borrow my BeagleBone for this lab.
+* On the other hand, my laptop (MacBook Pro 2017) simply refuses to install the drivers required to use the BeagleBone. Shubhrose allowed me to use his computer for this lab, which is why the terminal user in the screenshots is his username instead of mine.
