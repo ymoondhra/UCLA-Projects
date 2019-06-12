@@ -1,7 +1,7 @@
 # UCLA Projects
 This is a collection of some of my best coding projects assigned by UCLA courses.  
-
-
+  
+  
 ## Operating Systems Principles – CS 111 ##
 *Languages Used: C, Python, Bash*
 ### Lab 4: Internet of Things Secure Communication  ###
@@ -22,9 +22,9 @@ This is a collection of some of my best coding projects assigned by UCLA courses
 
 ### Lab 0: Warmup ###
 * Goal: Learn how to parse command-line arguments and debug the execution of the program
-* Method: Used the getopt library function called getopt_long to parse arguments and then used gcc to catch a segmentation fault
+* Method: Used the getopt library function called getopt_long to parse arguments and then used gcc to catch a segmentation fault  
   
-
+  
 ## Software Construction Laboratory – CS 35L ##
 *Languages Used: C, Python, Bash, HTML, Git*
 ### Assignment 10: Research and Development in Computing ###
@@ -97,10 +97,10 @@ Each student was given a unique memory dump and had to figure out the input keys
 Each student was given the same C program, created by a UCLA graduate student, that superimposes multiple X-Ray photos to create a single photo. The goal was to make the code twenty times faster than the original program. I used the OpenMP API and optimization techniques such as tiling, strength reduction, and code motion to make the code thirty one times faster. 
 
 ### Attack Lab ###
-The goal of this six-phase lab was to hack a program by taking advantage of buffer overflow, injecting code, and using return-oriented-programming. I used the debugging tools GDB and OBJDUMP and used gadgets (byte-values) from a gadget farm. 
+The goal of this six-phase lab was to hack a program by taking advantage of buffer overflow, injecting code, and using return-oriented-programming. I used the debugging tools GDB and OBJDUMP and used gadgets (byte-values) from a gadget farm.  
   
-
-## Data Structures & Algorithms – CS32 ##
+  
+## Data Structures & Algorithms – CS32 ##  
 ### Decrypter ###
 The assignment was to build a C++ program that can decrypt messages that are encrypted with the Simple Substitution Cipher 
 (i.e. grey grapefruit --> qefx qebdfvjuio). The algorithm must print all possible decryptions that the encrypted message could be
