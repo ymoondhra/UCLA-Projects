@@ -1,7 +1,8 @@
 # UCLA Projects
 This is a collection of some of my best coding projects assigned by UCLA courses.
 
-## Software Construction Laboratory – CS 35L ##
+
+## Operating Systems Principles – CS 111 ##
 *Languages Used: C, Python, Bash*
 ### Lab 4: Internet of Things Secure Communication  ###
 * Goal: Transfer live temperature data from the BeagleBone hardware to the UCLA server by using the TLS and TCP protocols
@@ -22,6 +23,7 @@ This is a collection of some of my best coding projects assigned by UCLA courses
 ### Lab 0: Warmup ###
 * Goal: Learn how to parse command-line arguments and debug the execution of the program
 * Method: Used the getopt library function called getopt_long to parse arguments and then used gcc to catch a segmentation fault
+
 
 ## Software Construction Laboratory – CS 35L ##
 *Languages Used: C, Python, Bash, HTML, Git*
@@ -65,6 +67,7 @@ This is a collection of some of my best coding projects assigned by UCLA courses
 * Goal: Learn emacs, Bash commands, and the organization of files in the computer system
 * Method: Completed numerous small tasks by navigating around my computer using the command line and by editing files using emacs
 
+
 ## Computer Organization – CS33 ##
 ### Bomb Lab ###
 Each student was given a unique memory dump and had to figure out the input keys to defuse six bombs. To find the correct input, I set breakpoints in the program and stepped through line-by-line, checking values in registers and finding patterns in the way the code handled my input. The following is a small snippet of code I traced through.
@@ -95,6 +98,7 @@ Each student was given the same C program, created by a UCLA graduate student, t
 
 ### Attack Lab ###
 The goal of this six-phase lab was to hack a program by taking advantage of buffer overflow, injecting code, and using return-oriented-programming. I used the debugging tools GDB and OBJDUMP and used gadgets (byte-values) from a gadget farm. 
+
 
 ## Data Structures & Algorithms – CS32 ##
 ### Decrypter ###
