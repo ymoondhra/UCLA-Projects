@@ -1,5 +1,5 @@
 # UCLA Projects
-This is a collection of some of my best coding projects assigned by UCLA courses.
+This is a collection of some of my best coding projects assigned by UCLA courses.  
 
 
 ## Operating Systems Principles – CS 111 ##
@@ -23,7 +23,7 @@ This is a collection of some of my best coding projects assigned by UCLA courses
 ### Lab 0: Warmup ###
 * Goal: Learn how to parse command-line arguments and debug the execution of the program
 * Method: Used the getopt library function called getopt_long to parse arguments and then used gcc to catch a segmentation fault
-
+  
 
 ## Software Construction Laboratory – CS 35L ##
 *Languages Used: C, Python, Bash, HTML, Git*
@@ -66,7 +66,7 @@ This is a collection of some of my best coding projects assigned by UCLA courses
 ### Assignment 1: Getting to Know Your System ###
 * Goal: Learn emacs, Bash commands, and the organization of files in the computer system
 * Method: Completed numerous small tasks by navigating around my computer using the command line and by editing files using emacs
-
+  
 
 ## Computer Organization – CS33 ##
 ### Bomb Lab ###
@@ -98,7 +98,7 @@ Each student was given the same C program, created by a UCLA graduate student, t
 
 ### Attack Lab ###
 The goal of this six-phase lab was to hack a program by taking advantage of buffer overflow, injecting code, and using return-oriented-programming. I used the debugging tools GDB and OBJDUMP and used gadgets (byte-values) from a gadget farm. 
-
+  
 
 ## Data Structures & Algorithms – CS32 ##
 ### Decrypter ###
