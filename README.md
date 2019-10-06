@@ -5,8 +5,8 @@ This is a collection of some of my best coding projects assigned by UCLA courses
 ## Operating Systems Principles – CS 111 ##
 *Languages Used: C, Python, Bash*
 ### Lab 4: Internet of Things Secure Communication  ###
-* Goal: Transfer live temperature data from the BeagleBone hardware to the UCLA server by using the TLS and TCP protocols
-* Method: NEED TO INPUT METHIOD HERE
+* Goal: Learn how to send live temperature data from the BeagleBone hardware to the UCLA server by using the TLS and TCP protocols
+* Method: Wrote a socket program that uses polling to receive input from the user's keyboard and simultaneously transfer the temperature data
 
 ### Lab 3: File System Interpretation and Analysis ###
 * Goal: Learn about a new type of file system (EXT2) and use its structure to output information about an image of it
